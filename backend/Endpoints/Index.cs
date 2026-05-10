@@ -1,6 +1,6 @@
 namespace Backend.Endpoints;
 
-internal sealed record IndexData(string Route, int Count);
+internal sealed record IndexData(int Count);
 
 public static class Index
 {
@@ -9,12 +9,11 @@ public static class Index
         app.MapGet("/", (HttpContext context) =>
         {
             var webuiApp = context.GetWebUiApplication();
-            var route = context.GetRequestPath();
 
             var state = JsonSerializer.Serialize(
-                new IndexData(route, 0), 
+                new IndexData(Random.Shared.Next(0, 20)),
                 AppJsonSerializerContext.Default.IndexData);
-            
+
             return context.RenderWebUiResponse(webuiApp, state);
         });
 

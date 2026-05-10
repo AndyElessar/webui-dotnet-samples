@@ -2,7 +2,6 @@
 namespace Backend.Endpoints;
 
 internal sealed record WeatherData(
-    string Route,
     WeatherForecast[] Forecasts,
     string ErrorMessage);
 
@@ -23,10 +22,8 @@ public static class Weather
         app.MapGet("/weather", (HttpContext context) =>
         {
             var webuiApp = context.GetWebUiApplication();
-            var route = context.GetRequestPath();
 
             var state = JsonSerializer.Serialize(new WeatherData(
-                route,
                 CreateForecasts(summaries),
                 string.Empty
             ), AppJsonSerializerContext.Default.WeatherData);
