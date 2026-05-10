@@ -1,0 +1,182 @@
+:host {
+  display: block;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 0.8fr);
+  gap: 18px;
+}
+
+.manifesto,
+.counter-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+  border: 1px solid rgba(29, 27, 26, 0.16);
+}
+
+.manifesto {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(28px, 5vw, 56px);
+  background:
+    linear-gradient(140deg, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.15)),
+    linear-gradient(180deg, rgba(29, 27, 26, 0.04), rgba(29, 27, 26, 0));
+}
+
+.manifesto::before {
+  content: '';
+  position: absolute;
+  inset: 22px auto auto 22px;
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  border: 1px solid rgba(182, 70, 47, 0.38);
+}
+
+.manifesto::after {
+  content: '';
+  position: absolute;
+  inset: auto 28px 32px auto;
+  width: 180px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(29, 27, 26, 0.35));
+  transform: rotate(-18deg);
+}
+
+.label,
+.serial,
+.caption,
+.status {
+  margin: 0;
+}
+
+.label,
+.serial {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font: 700 0.76rem/1.2 "Bahnschrift", "Franklin Gothic Medium", sans-serif;
+  color: #7f3a2b;
+}
+
+h1 {
+  position: relative;
+  z-index: 1;
+  margin: 18px 0 0;
+  max-width: 10ch;
+  font: 700 clamp(3.4rem, 8vw, 6.8rem)/0.92 "Iowan Old Style", "Palatino Linotype", serif;
+  letter-spacing: -0.05em;
+}
+
+.summary {
+  position: relative;
+  z-index: 1;
+  width: min(440px, 100%);
+  margin: 22px 0 0;
+  color: #645749;
+  font: 500 1.05rem/1.7 "Trebuchet MS", "Gill Sans", sans-serif;
+}
+
+.hero-trigger {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  align-self: flex-start;
+  margin-top: 26px;
+  padding: 14px 16px 14px 20px;
+  border: 1px solid rgba(29, 27, 26, 0.88);
+  background: #201f1d;
+  color: #f8f2e9;
+  font: 700 0.92rem/1.2 "Trebuchet MS", "Gill Sans", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 8px 8px 0 #d66a52;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.hero-trigger span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  min-height: 34px;
+  border-radius: 50%;
+  background: #f8f2e9;
+  color: #201f1d;
+  font: 700 1rem/1 "Bahnschrift", "Franklin Gothic Medium", sans-serif;
+}
+
+.hero-trigger:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 12px 12px 0 #d66a52;
+}
+
+.hero-trigger:focus-visible {
+  outline: 3px solid rgba(182, 70, 47, 0.25);
+  outline-offset: 5px;
+}
+
+.counter-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 26px;
+  background:
+    linear-gradient(180deg, rgba(182, 70, 47, 0.12), rgba(255, 255, 255, 0.72)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.88));
+}
+
+.counter-card::before {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(29, 27, 26, 0.12);
+}
+
+.countline {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.number {
+  font: 700 clamp(5rem, 15vw, 8.6rem)/0.86 "Bahnschrift", "Franklin Gothic Medium", sans-serif;
+  letter-spacing: -0.07em;
+}
+
+.caption {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font: 700 0.74rem/1.2 "Bahnschrift", "Franklin Gothic Medium", sans-serif;
+}
+
+.status {
+  position: relative;
+  z-index: 1;
+  max-width: 22ch;
+  color: #4d4135;
+  font: 500 0.98rem/1.65 "Trebuchet MS", "Gill Sans", sans-serif;
+}
+
+@media (max-width: 860px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .manifesto,
+  .counter-card {
+    min-height: auto;
+  }
+
+  h1 {
+    max-width: none;
+  }
+}

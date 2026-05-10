@@ -1,0 +1,25 @@
+<section class="app-frame">
+  <header class="app-header">
+    <a class="brand" href="/">
+      <span class="brand-mark">W</span>
+      <span>
+        <strong>WebUI Aspire Demo</strong>
+        <small>Minimal API hosted frontend</small>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Demo pages">
+      <a class="nav-link" href="/" ?data-active="{{route == '/'}}">Showcase</a>
+      <a class="nav-link" href="/weather" ?data-active="{{route == '/weather'}}">Weather</a>
+    </nav>
+  </header>
+
+  <main>
+    <if condition="route == '/'">
+      <counter-showcase></counter-showcase>
+    </if>
+    <if condition="route == '/weather'">
+      <weather-page></weather-page>
+    </if>
+  </main>
+</section>

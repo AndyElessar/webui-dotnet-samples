@@ -1,0 +1,27 @@
+<section class="hero-grid">
+  <article class="manifesto">
+    <p class="label">Counter column</p>
+    <h1>Build pages as printed compositions, then let only the live parts wake up.</h1>
+    <p class="summary">
+      The hero is its own component now. The shell frames the page, while this island owns the counter state.
+    </p>
+    <button type="button" class="hero-trigger" @click="{increment()}">
+      Click the counter
+      <span>{{count}}</span>
+    </button>
+  </article>
+
+  <article class="counter-card">
+    <p class="serial">Interactive plate</p>
+    <div class="countline">
+      <span class="number">{{count}}</span>
+      <span class="caption">presses logged</span>
+    </div>
+    <if condition="count == 0">
+      <p class="status">The first click starts hydration.</p>
+    </if>
+    <if condition="count > 0">
+      <p class="status">The component is live and updating its own observable state.</p>
+    </if>
+  </article>
+</section>

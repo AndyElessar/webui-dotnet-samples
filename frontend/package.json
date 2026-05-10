@@ -1,0 +1,22 @@
+{
+  "name": "test-webui",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "dotnet watch --project ../backend/backend.csproj run",
+    "dev:client": "rolldown --config ./rolldown.config.mjs --file ./public/index.js --sourcemap --watch",
+    "typecheck": "tsc -p tsconfig.json",
+    "build:client": "rolldown --config ./rolldown.config.mjs --file ./public/index.js --sourcemap",
+    "build:client:dist": "rolldown --config ./rolldown.config.mjs --file ./dist/index.js --minify",
+    "build": "npm run typecheck && npm run build:client:dist && webui build ./src --out ./dist --plugin=webui"
+  },
+  "devDependencies": {
+    "rolldown": "^1.0.0",
+    "typescript": "~6.0.2",
+    "@microsoft/webui": "^0.0.12"
+  },
+  "dependencies": {
+    "@microsoft/webui-framework": "latest"
+  }
+}

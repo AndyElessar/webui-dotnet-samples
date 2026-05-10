@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PublishAOT>true</PublishAOT>
+    <FrontendProjectDir>$(MSBuildProjectDirectory)\..\frontend\</FrontendProjectDir>
+    <FrontendDistDir>$(FrontendProjectDir)dist\</FrontendDistDir>
+    <FrontendWebUiCliPackage>$(FrontendProjectDir)node_modules\@microsoft\webui\package.json</FrontendWebUiCliPackage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WebUI" Version="0.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\aspire\service-defaults\service-defaults.csproj" />
+  </ItemGroup>
+
+  <Target
+    Name="RestoreFrontendDependencies"
+    BeforeTargets="BuildFrontend"
+    Condition="'$(SkipFrontendBuild)' != 'true' and !Exists('$(FrontendWebUiCliPackage)')">
+    <Exec WorkingDirectory="$(FrontendProjectDir)" Command="npm ci" />
+  </Target>
+
+  <Target Name="BuildFrontend" BeforeTargets="BeforeBuild" Condition="'$(SkipFrontendBuild)' != 'true'">
+    <Exec WorkingDirectory="$(FrontendProjectDir)" Command="npm run build" />
+  </Target>
+
+  <Target Name="CopyFrontendDist" AfterTargets="Build">
+    <Copy
+      SourceFiles="$(FrontendDistDir)protocol.bin"
+      DestinationFiles="$(TargetDir)webui\protocol.bin"
+      SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="CopyFrontendDistToPublish" AfterTargets="Publish">
+    <Copy
+      SourceFiles="$(FrontendDistDir)protocol.bin"
+      DestinationFiles="$(PublishDir)webui\protocol.bin"
+      SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>
