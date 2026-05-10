@@ -1,0 +1,69 @@
+<section class="todo-edit-page">
+  <header class="edit-hero">
+    <p class="eyebrow">Todo editor</p>
+    <h1>Update one task.</h1>
+    <a class="back-link" href="{{returnPath}}">Back to list</a>
+  </header>
+
+  <if condition="errorMessage != ''">
+    <p class="status error">{{errorMessage}}</p>
+  </if>
+
+  <if condition="found">
+    <section class="edit-layout">
+      <form class="edit-form" method="post" action="/todos/edit">
+        <input type="hidden" name="id" value="{{id}}" />
+        <input type="hidden" name="returnTo" value="{{returnPath}}" />
+
+        <label>
+          <span>Title</span>
+          <input name="title" type="text" maxlength="120" value="{{title}}" required />
+        </label>
+
+        <label>
+          <span>Notes</span>
+          <textarea name="notes" maxlength="500" rows="7">{{notes}}</textarea>
+        </label>
+
+        <label class="check-row">
+          <input name="completed" type="checkbox" value="true" ?checked="{{completed}}" />
+          <span>Completed</span>
+        </label>
+
+        <div class="form-actions">
+          <button type="submit">Save Changes</button>
+          <a class="secondary-action" href="{{returnPath}}">Cancel</a>
+        </div>
+      </form>
+
+      <aside class="meta-panel" aria-label="Todo metadata">
+        <dl>
+          <div>
+            <dt>Status</dt>
+            <dd>{{statusLabel}}</dd>
+          </div>
+          <div>
+            <dt>Created</dt>
+            <dd>{{createdAt}}</dd>
+          </div>
+          <div>
+            <dt>Updated</dt>
+            <dd>{{updatedAt}}</dd>
+          </div>
+        </dl>
+        <form method="post" action="/todos/delete">
+          <input type="hidden" name="id" value="{{id}}" />
+          <input type="hidden" name="returnTo" value="{{returnPath}}" />
+          <button class="delete-button" type="submit">Delete Todo</button>
+        </form>
+      </aside>
+    </section>
+  </if>
+
+  <if condition="!found">
+    <section class="missing-panel">
+      <p>The requested todo cannot be edited.</p>
+      <a class="secondary-action" href="{{returnPath}}">Return to todos</a>
+    </section>
+  </if>
+</section>

@@ -30,16 +30,22 @@
   </Target>
 
   <Target Name="CopyFrontendDist" AfterTargets="Build">
+    <ItemGroup>
+      <FrontendDistFiles Include="$(FrontendDistDir)**\*" />
+    </ItemGroup>
     <Copy
-      SourceFiles="$(FrontendDistDir)protocol.bin"
-      DestinationFiles="$(TargetDir)webui\protocol.bin"
+      SourceFiles="@(FrontendDistFiles)"
+      DestinationFiles="@(FrontendDistFiles->'$(TargetDir)webui\%(RecursiveDir)%(Filename)%(Extension)')"
       SkipUnchangedFiles="true" />
   </Target>
 
   <Target Name="CopyFrontendDistToPublish" AfterTargets="Publish">
+    <ItemGroup>
+      <FrontendDistFiles Include="$(FrontendDistDir)**\*" />
+    </ItemGroup>
     <Copy
-      SourceFiles="$(FrontendDistDir)protocol.bin"
-      DestinationFiles="$(PublishDir)webui\protocol.bin"
+      SourceFiles="@(FrontendDistFiles)"
+      DestinationFiles="@(FrontendDistFiles->'$(PublishDir)webui\%(RecursiveDir)%(Filename)%(Extension)')"
       SkipUnchangedFiles="true" />
   </Target>
 

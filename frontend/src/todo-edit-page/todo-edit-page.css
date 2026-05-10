@@ -1,0 +1,192 @@
+:host {
+  --paper: #f6efe4;
+  --ink: #1d1b1a;
+  --muted: #645749;
+  --line: rgba(29, 27, 26, 0.18);
+  --accent: #b6462f;
+  --blue: #23527a;
+  display: block;
+  min-height: calc(100svh - 72px);
+  color: var(--ink);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.todo-edit-page {
+  width: min(980px, calc(100% - 28px));
+  margin: 0 auto;
+  padding: 42px 0;
+}
+
+.edit-hero,
+.edit-layout,
+.missing-panel,
+.status {
+  border: 1px solid var(--line);
+  background: rgba(255, 251, 244, 0.72);
+}
+
+.edit-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: end;
+  padding: clamp(28px, 5vw, 52px);
+  background:
+    linear-gradient(135deg, rgba(182, 70, 47, 0.12), transparent 35%),
+    rgba(255, 251, 244, 0.72);
+}
+
+.eyebrow,
+h1,
+p,
+dl,
+dd {
+  margin: 0;
+}
+
+.eyebrow {
+  color: #7f3a2b;
+  font: 700 0.76rem/1.2 "Bahnschrift", "Franklin Gothic Medium", sans-serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+h1 {
+  max-width: 10ch;
+  margin-top: 16px;
+  font: 700 clamp(2.8rem, 7vw, 5.8rem)/0.95 "Iowan Old Style", "Palatino Linotype", serif;
+}
+
+.status,
+.missing-panel {
+  margin-top: 18px;
+  padding: 22px;
+  color: var(--muted);
+  font: 700 0.95rem/1.5 "Trebuchet MS", "Gill Sans", sans-serif;
+}
+
+.error {
+  color: #7f3a2b;
+}
+
+.edit-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 1px;
+  margin-top: 18px;
+  background: var(--line);
+}
+
+.edit-form,
+.meta-panel,
+.missing-panel {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  padding: 24px;
+  background: rgba(255, 251, 244, 0.82);
+}
+
+label {
+  display: grid;
+  gap: 8px;
+}
+
+label span,
+dt {
+  color: var(--muted);
+  font: 700 0.74rem/1.2 "Trebuchet MS", "Gill Sans", sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+input,
+textarea {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(29, 27, 26, 0.24);
+  background: #fffbf4;
+  color: var(--ink);
+  font: 600 0.95rem/1.4 "Trebuchet MS", "Gill Sans", sans-serif;
+}
+
+input {
+  padding: 0 12px;
+}
+
+textarea {
+  resize: vertical;
+  padding: 12px;
+}
+
+.check-row {
+  grid-template-columns: 20px 1fr;
+  align-items: center;
+}
+
+.check-row input {
+  width: 18px;
+  min-height: 18px;
+  padding: 0;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button,
+.secondary-action,
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 14px;
+  border: 1px solid rgba(29, 27, 26, 0.88);
+  background: #201f1d;
+  color: #f8f2e9;
+  font: 700 0.78rem/1.2 "Trebuchet MS", "Gill Sans", sans-serif;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.secondary-action,
+.back-link {
+  background: transparent;
+  color: var(--ink);
+}
+
+.meta-panel dl {
+  display: grid;
+  gap: 16px;
+}
+
+dd {
+  margin-top: 5px;
+  font: 700 1rem/1.4 "Trebuchet MS", "Gill Sans", sans-serif;
+}
+
+.delete-button {
+  width: 100%;
+  border-color: rgba(127, 58, 43, 0.52);
+  background: transparent;
+  color: #7f3a2b;
+}
+
+@media (max-width: 760px) {
+  .edit-hero,
+  .edit-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .back-link {
+    justify-self: start;
+  }
+}

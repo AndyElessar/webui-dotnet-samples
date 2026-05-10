@@ -6,6 +6,7 @@ builder.AddServiceDefaults();
 
 var webuiAssetsPath = Path.Combine(AppContext.BaseDirectory, "webui");
 builder.Services.AddSingleton(new WebUiApplication(webuiAssetsPath));
+builder.Services.AddSingleton<TodoService>();
 
 var app = builder.Build();
 
@@ -18,6 +19,7 @@ app.UseStaticFiles(new StaticFileOptions
 app.MapDefaultEndpoints();
 
 app.MapIndex()
-    .MapWeather();
+    .MapWeather()
+    .MapTodos();
 
 app.Run();

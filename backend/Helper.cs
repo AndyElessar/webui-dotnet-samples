@@ -39,6 +39,8 @@ internal static class Helper
 
 [JsonSerializable(typeof(IndexData))]
 [JsonSerializable(typeof(WeatherData))]
+[JsonSerializable(typeof(TodosData))]
+[JsonSerializable(typeof(TodoEditData))]
 [JsonSourceGenerationOptions(JsonSerializerDefaults.Web)]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 {

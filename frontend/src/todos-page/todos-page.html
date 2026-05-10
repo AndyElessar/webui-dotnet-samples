@@ -1,0 +1,101 @@
+<section class="todos-page">
+  <header class="todos-hero">
+    <div>
+      <p class="eyebrow">In-memory CRUD</p>
+      <h1>Todo operations in WebUI.</h1>
+    </div>
+    <dl class="stats" aria-label="Todo status counts">
+      <div>
+        <dt>Total</dt>
+        <dd>{{totalCount}}</dd>
+      </div>
+      <div>
+        <dt>Open</dt>
+        <dd>{{openCount}}</dd>
+      </div>
+      <div>
+        <dt>Done</dt>
+        <dd>{{completedCount}}</dd>
+      </div>
+    </dl>
+  </header>
+
+  <if condition="errorMessage != ''">
+    <p class="status error">{{errorMessage}}</p>
+  </if>
+
+  <section class="workspace" aria-label="Todo controls">
+    <form class="query-panel" method="get" action="/todos">
+      <label>
+        <span>Search</span>
+        <input name="q" type="search" value="{{query}}" placeholder="Title or notes" />
+      </label>
+      <label>
+        <span>Status</span>
+        <select name="filter">
+          <option value="all" ?selected="{{filter == 'all'}}">All</option>
+          <option value="open" ?selected="{{filter == 'open'}}">Open</option>
+          <option value="completed" ?selected="{{filter == 'completed'}}">Completed</option>
+        </select>
+      </label>
+      <button type="submit">Apply</button>
+      <a class="secondary-action" href="/todos">Reset</a>
+    </form>
+
+    <form class="create-panel" method="post" action="/todos">
+      <input type="hidden" name="returnTo" value="{{returnPath}}" />
+      <label>
+        <span>New todo</span>
+        <input name="title" type="text" maxlength="120" placeholder="Add a task" required />
+      </label>
+      <label>
+        <span>Notes</span>
+        <textarea name="notes" maxlength="500" rows="3" placeholder="Optional detail"></textarea>
+      </label>
+      <button type="submit">Add Todo</button>
+    </form>
+  </section>
+
+  <section class="todo-table" aria-live="polite">
+    <if condition="todos.length == 0">
+      <p class="status">No todos match the current filters.</p>
+    </if>
+
+    <if condition="todos.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Status</th>
+            <th>Updated</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <for each="todo in todos">
+            <tr ?data-completed="{{todo.completed}}">
+              <td>
+                <strong>{{todo.title}}</strong>
+                <if condition="todo.notes != ''">
+                  <small>{{todo.notes}}</small>
+                </if>
+              </td>
+              <td><span class="badge">{{todo.statusLabel}}</span></td>
+              <td>{{todo.updatedAt}}</td>
+              <td>
+                <div class="row-actions">
+                  <a class="edit-link" href="{{todo.editPath}}">Edit</a>
+                  <form method="post" action="/todos/delete">
+                    <input type="hidden" name="id" value="{{todo.id}}" />
+                    <input type="hidden" name="returnTo" value="{{returnPath}}" />
+                    <button class="delete-button" type="submit">Delete</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          </for>
+        </tbody>
+      </table>
+    </if>
+  </section>
+</section>
