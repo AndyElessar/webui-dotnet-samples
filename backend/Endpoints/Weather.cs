@@ -23,14 +23,15 @@ public static class Weather
         app.MapGet("/weather", (HttpContext context) =>
         {
             var webuiApp = context.GetWebUiApplication();
+            var route = context.GetRequestPath();
 
             var state = JsonSerializer.Serialize(new WeatherData(
-                "/weather",
+                route,
                 CreateForecasts(summaries),
                 string.Empty
             ), AppJsonSerializerContext.Default.WeatherData);
 
-            return context.RenderWebUiResponse(webuiApp, state, "/weather");
+            return context.RenderWebUiResponse(webuiApp, state);
         });
 
         return app;

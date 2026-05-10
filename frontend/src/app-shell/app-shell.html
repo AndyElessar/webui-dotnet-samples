@@ -15,11 +15,6 @@
   </header>
 
   <main>
-    <if condition="route == '/'">
-      <counter-showcase></counter-showcase>
-    </if>
-    <if condition="route == '/weather'">
-      <weather-page></weather-page>
-    </if>
+    <outlet />
   </main>
 </section>

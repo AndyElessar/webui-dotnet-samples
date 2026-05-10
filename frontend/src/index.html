@@ -3,10 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
     <title>WebUI Aspire Demo</title>
   </head>
   <body>
-    <app-shell></app-shell>
+    <route path="/" component="app-shell">
+      <route path="" component="counter-showcase" exact />
+      <route path="weather" component="weather-page" exact />
+    </route>
     <script type="module" src="/index.js"></script>
   </body>
 </html>

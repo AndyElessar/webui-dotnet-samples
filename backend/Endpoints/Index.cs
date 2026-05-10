@@ -9,12 +9,13 @@ public static class Index
         app.MapGet("/", (HttpContext context) =>
         {
             var webuiApp = context.GetWebUiApplication();
+            var route = context.GetRequestPath();
 
             var state = JsonSerializer.Serialize(
-                new IndexData("/", 0), 
+                new IndexData(route, 0), 
                 AppJsonSerializerContext.Default.IndexData);
             
-            return context.RenderWebUiResponse(webuiApp, state, "/");
+            return context.RenderWebUiResponse(webuiApp, state);
         });
 
         return app;

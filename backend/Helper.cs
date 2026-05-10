@@ -5,8 +5,10 @@ namespace Backend;
 
 internal static class Helper
 {
-    public static IResult RenderWebUiResponse(this HttpContext context, WebUiApplication webuiApp, string stateJson, string requestPath)
+    public static IResult RenderWebUiResponse(this HttpContext context, WebUiApplication webuiApp, string stateJson)
     {
+        var requestPath = context.GetRequestPath();
+
         if (WantsJson(context.Request))
         {
             var inventory = context.Request.Headers["X-WebUI-Inventory"].FirstOrDefault() ?? string.Empty;
@@ -27,6 +29,11 @@ internal static class Helper
     public static WebUiApplication GetWebUiApplication(this HttpContext context)
     {
         return context.RequestServices.GetRequiredService<WebUiApplication>();
+    }
+
+    public static string GetRequestPath(this HttpContext context)
+    {
+        return string.IsNullOrEmpty(context.Request.Path.Value) ? "/" : context.Request.Path.Value;
     }
 }
 
