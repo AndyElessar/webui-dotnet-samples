@@ -5,16 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "dotnet watch --project ../backend/backend.csproj run",
-    "dev:client": "rolldown --config ./rolldown.config.mjs --file ./public/index.js --sourcemap --watch",
+    "dev:client": "tsdown --config ./tsdown.config.mjs --out-dir ./public --sourcemap --watch",
     "typecheck": "tsgo -p tsconfig.json",
-    "build:client": "rolldown --config ./rolldown.config.mjs --file ./public/index.js --sourcemap",
-    "build:client:dist": "rolldown --config ./rolldown.config.mjs --file ./dist/index.js --minify",
+    "build:client": "tsdown --config ./tsdown.config.mjs --out-dir ./public --sourcemap",
+    "build:client:dist": "tsdown --config ./tsdown.config.mjs --out-dir ./dist --minify",
     "build": "npm run typecheck && npm run build:client:dist && webui build ./src --out ./dist --plugin=webui"
   },
   "devDependencies": {
     "@microsoft/webui": "latest",
     "@typescript/native-preview": "^7.0.0-dev.20260510.1",
-    "rolldown": "^1.0.0"
+    "tsdown": "^0.22.0"
   },
   "dependencies": {
     "@microsoft/webui-framework": "latest"
