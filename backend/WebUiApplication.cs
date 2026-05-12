@@ -1,30 +1,40 @@
 
 namespace Backend;
 
-internal sealed class WebUiApplication : IDisposable
+internal sealed class WebUiProtocolProvider
 {
-    private const string EntryTemplate = "index.html";
-    private readonly WebUIHandler handler;
-    private readonly byte[] protocol;
+    public byte[] Protocol { get; }
 
-    public WebUiApplication(string assetsPath)
+    public WebUiProtocolProvider(string assetsPath)
     {
-        AssetsPath = assetsPath;
-
-        if (!Directory.Exists(AssetsPath))
+        if (!Directory.Exists(assetsPath))
         {
-            throw new DirectoryNotFoundException($"WebUI assets were not found at '{AssetsPath}'. Run the frontend build before starting the backend.");
+            throw new DirectoryNotFoundException($"WebUI assets were not found at '{assetsPath}'. Run the frontend build before starting the backend.");
         }
 
-        var protocolPath = Path.Combine(AssetsPath, "protocol.bin");
+        var protocolPath = Path.Combine(assetsPath, "protocol.bin");
 
         if (!File.Exists(protocolPath))
         {
             throw new FileNotFoundException("WebUI protocol.bin was not found.", protocolPath);
         }
 
-        protocol = File.ReadAllBytes(protocolPath);
+        Protocol = File.ReadAllBytes(protocolPath);
+    }
+}
 
+internal sealed class WebUiApplication : IDisposable
+{
+    private const string EntryTemplate = "index.html";
+    private readonly WebUiProtocolProvider protocolProvider;
+
+    private readonly WebUIHandler handler;
+    private readonly NonceProvider nonceProvider;
+
+    public WebUiApplication(WebUiProtocolProvider webUiProtocolProvider, NonceProvider nonceProvider)
+    {
+        protocolProvider = webUiProtocolProvider;
+        this.nonceProvider = nonceProvider;
         try
         {
             handler = new WebUIHandler("webui");
@@ -43,16 +53,21 @@ internal sealed class WebUiApplication : IDisposable
         }
     }
 
-    public string AssetsPath { get; }
+    private void SetNonce()
+    {
+        handler.SetNonce(nonceProvider.Nonce);
+    }
 
     public string RenderHtml(string stateJson, string requestPath)
     {
-        return handler.Render(protocol, stateJson, EntryTemplate, requestPath);
+        SetNonce();
+        return handler.Render(protocolProvider.Protocol, stateJson, EntryTemplate, requestPath);
     }
 
     public string RenderPartial(string stateJson, string requestPath, string inventory)
     {
-        return handler.RenderPartial(protocol, stateJson, EntryTemplate, requestPath, inventory);
+        SetNonce();
+        return handler.RenderPartial(protocolProvider.Protocol, stateJson, EntryTemplate, requestPath, inventory);
     }
 
     public void Dispose()

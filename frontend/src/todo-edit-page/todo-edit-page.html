@@ -12,8 +12,9 @@
   <if condition="found">
     <section class="edit-layout">
       <form class="edit-form" method="post" action="/todos/edit">
+        <input type="hidden" name="{{antiforgeryToken.formFieldName}}" value="{{antiforgeryToken.token}}" />
         <input type="hidden" name="id" value="{{id}}" />
-        <input type="hidden" name="returnTo" value="{{returnPath}}" />
+        <input type="hidden" name="returnPath" value="{{returnPath}}" />
 
         <label>
           <span>Title</span>
@@ -52,8 +53,9 @@
           </div>
         </dl>
         <form method="post" action="/todos/delete">
+          <input type="hidden" name="{{antiforgeryToken.formFieldName}}" value="{{antiforgeryToken.token}}" />
           <input type="hidden" name="id" value="{{id}}" />
-          <input type="hidden" name="returnTo" value="{{returnPath}}" />
+          <input type="hidden" name="returnPath" value="{{returnPath}}" />
           <button class="delete-button" type="submit">Delete Todo</button>
         </form>
       </aside>

@@ -28,7 +28,7 @@
     <form class="query-panel" method="get" action="/todos">
       <label>
         <span>Search</span>
-        <input name="q" type="search" value="{{query}}" placeholder="Title or notes" />
+        <input name="searchText" type="search" value="{{searchText}}" placeholder="Title or notes" />
       </label>
       <label>
         <span>Status</span>
@@ -43,7 +43,8 @@
     </form>
 
     <form class="create-panel" method="post" action="/todos">
-      <input type="hidden" name="returnTo" value="{{returnPath}}" />
+      <input type="hidden" name="{{antiforgeryToken.formFieldName}}" value="{{antiforgeryToken.token}}" />
+      <input type="hidden" name="returnPath" value="{{returnPath}}" />
       <label>
         <span>New todo</span>
         <input name="title" type="text" maxlength="120" placeholder="Add a task" required />
@@ -86,8 +87,9 @@
                 <div class="row-actions">
                   <a class="edit-link" href="{{todo.editPath}}">Edit</a>
                   <form method="post" action="/todos/delete">
+                    <input type="hidden" name="{{antiforgeryToken.formFieldName}}" value="{{antiforgeryToken.token}}" />
                     <input type="hidden" name="id" value="{{todo.id}}" />
-                    <input type="hidden" name="returnTo" value="{{returnPath}}" />
+                    <input type="hidden" name="returnPath" value="{{returnPath}}" />
                     <button class="delete-button" type="submit">Delete</button>
                   </form>
                 </div>

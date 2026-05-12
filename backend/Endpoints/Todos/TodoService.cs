@@ -1,16 +1,8 @@
-namespace Backend;
-
-internal sealed record TodoItem(
-    int Id,
-    string Title,
-    string Notes,
-    bool Completed,
-    DateTimeOffset CreatedAt,
-    DateTimeOffset UpdatedAt);
+namespace Backend.Endpoints.Todos;
 
 internal sealed class TodoService
 {
-    private readonly object syncRoot = new();
+    private readonly Lock _lock = new();
     private readonly List<TodoItem> todos = [];
     private int nextId = 1;
 
@@ -21,15 +13,14 @@ internal sealed class TodoService
         AddCore("Verify with Aspire", "Open the running app and exercise the todo flow.", completed: false);
     }
 
-    public TodoItem[] Search(string query, string filter)
+    public TodoItem[] Search(string? query, TodosQueryFilter filter)
     {
-        var normalizedQuery = query.Trim();
-        var normalizedFilter = NormalizeFilter(filter);
+        var normalizedQuery = query?.Trim() ?? string.Empty;
 
-        lock (syncRoot)
+        lock (_lock)
         {
             return [.. todos
-                .Where(todo => MatchesFilter(todo, normalizedFilter))
+                .Where(todo => MatchesFilter(todo, filter))
                 .Where(todo => MatchesQuery(todo, normalizedQuery))
                 .OrderBy(todo => todo.Completed)
                 .ThenByDescending(todo => todo.UpdatedAt)];
@@ -38,7 +29,7 @@ internal sealed class TodoService
 
     public TodoItem? GetById(int id)
     {
-        lock (syncRoot)
+        lock (_lock)
         {
             return todos.FirstOrDefault(todo => todo.Id == id);
         }
@@ -46,7 +37,7 @@ internal sealed class TodoService
 
     public TodoCounts GetCounts()
     {
-        lock (syncRoot)
+        lock (_lock)
         {
             var completedCount = todos.Count(todo => todo.Completed);
             return new TodoCounts(todos.Count, todos.Count - completedCount, completedCount);
@@ -55,7 +46,7 @@ internal sealed class TodoService
 
     public TodoItem Add(string title, string notes)
     {
-        lock (syncRoot)
+        lock (_lock)
         {
             return AddCore(title, notes, completed: false);
         }
@@ -63,7 +54,7 @@ internal sealed class TodoService
 
     public bool Update(int id, string title, string notes, bool completed)
     {
-        lock (syncRoot)
+        lock (_lock)
         {
             var index = todos.FindIndex(todo => todo.Id == id);
             if (index < 0)
@@ -85,7 +76,7 @@ internal sealed class TodoService
 
     public bool Delete(int id)
     {
-        lock (syncRoot)
+        lock (_lock)
         {
             return todos.RemoveAll(todo => todo.Id == id) > 0;
         }
@@ -99,31 +90,30 @@ internal sealed class TodoService
         return todo;
     }
 
-    private static bool MatchesFilter(TodoItem todo, string filter)
+    private static bool MatchesFilter(TodoItem todo, TodosQueryFilter filter)
     {
         return filter switch
         {
-            "open" => !todo.Completed,
-            "completed" => todo.Completed,
+            TodosQueryFilter.Open => !todo.Completed,
+            TodosQueryFilter.Completed => todo.Completed,
             _ => true
         };
     }
 
     private static bool MatchesQuery(TodoItem todo, string query)
     {
-        return query.Length == 0
+        return string.IsNullOrEmpty(query)
             || todo.Title.Contains(query, StringComparison.OrdinalIgnoreCase)
             || todo.Notes.Contains(query, StringComparison.OrdinalIgnoreCase);
     }
-
-    public static string NormalizeFilter(string filter)
-    {
-        return filter switch
-        {
-            "open" or "completed" => filter,
-            _ => "all"
-        };
-    }
 }
+
+internal sealed record TodoItem(
+    int Id,
+    string Title,
+    string Notes,
+    bool Completed,
+    DateTimeOffset CreatedAt,
+    DateTimeOffset UpdatedAt);
 
 internal sealed record TodoCounts(int Total, int Open, int Completed);
