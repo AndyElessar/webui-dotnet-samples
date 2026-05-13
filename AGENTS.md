@@ -1,10 +1,10 @@
 # Demo app for `microsoft/webui`
 
-This project is a demo app for [microsoft/webui](https://github.com/microsoft/webui). Demonstrates server-side rendering and client-side hydration.
+This project contains demo apps for [microsoft/webui](https://github.com/microsoft/webui) with ASP.NET Core and Aspire. Demonstrates server-side rendering and client-side hydration.
 
 ## Tech Stack
 
-- backend: ASP.NET Core 10 Minimal API
+- backend: ASP.NET Core
 - frontend: microsoft/webui
 - orchestration: aspire
 
@@ -19,14 +19,14 @@ cd samples/todo
 aspire start
 ```
 
-Use #tool:browser to test app.
+Use #tool:browser to test and interact with the app.
 
 ## Rules
 
 - Minimal API should use `TypeResults` instead of `Results` to enable better OpenAPI generation.
 - Backend should always be compatible with Native AOT for best performance. Which means use Source Generators as much as possible and avoid using reflection.
-- When designing frontend components, use skill: `frontend-design`.
-- When you want to: check current aspire apphosts status, use `aspire` CLI tool. Check skill: `aspire`.
+- When designing frontend components, load skill: `frontend-design`. Use #tool:browser to test and iterate on the design.
+- When you want to check current aspire apphosts status, use `aspire` CLI tool. Load skill: `aspire`.
 
 ## References
 

@@ -1,4 +1,4 @@
-name: test-webui
+name: webui-dotnet-samples
 version: 0.0.1
 target:
 - copilot
