@@ -12,17 +12,12 @@ internal sealed record WeatherForecast(DateOnly Date, int TemperatureC, string? 
 
 public static class Weather
 {
-    private static readonly string[] summaries =
-    [
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    ];
-
     public static WebApplication MapWeather(this WebApplication app)
     {
-        app.MapGet("/weather", (HttpContext context) =>
+        app.MapGet("/weather", (HttpContext context, [FromServices] WeatherForecastService weatherForecastService) =>
         {
             var state = JsonSerializer.Serialize(new WeatherData(
-                CreateForecasts(summaries),
+                weatherForecastService.GetForecasts(),
                 string.Empty
             ), AppJsonSerializerContext.Default.WeatherData);
 
@@ -31,15 +26,24 @@ public static class Weather
 
         return app;
     }
+}
 
-    private static WeatherForecast[] CreateForecasts(string[] summaries)
+internal sealed class WeatherForecastService
+{
+    private readonly WeatherForecast[] forecasts;
+
+    public WeatherForecastService()
     {
-        return [.. Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))];
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        forecasts =
+        [
+            new(today, 22, "Clear start"),
+            new(today.AddDays(1), 18, "Showers"),
+            new(today.AddDays(2), 31, "Heat watch"),
+            new(today.AddDays(3), 16, "Cool air"),
+            new(today.AddDays(4), 26, "Bright finish")
+        ];
     }
+
+    public WeatherForecast[] GetForecasts() => [.. forecasts];
 }

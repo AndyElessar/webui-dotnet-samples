@@ -1,0 +1,27 @@
+lockfile_version: '1'
+generated_at: '2026-05-12T19:14:26.802817+00:00'
+apm_version: 0.13.0
+dependencies:
+- repo_url: anthropics/claude-code
+  host: github.com
+  resolved_commit: fdfbc06c7a6d9ace49c55b3761b1be05d276da6d
+  virtual_path: plugins/frontend-design
+  is_virtual: true
+  package_type: marketplace_plugin
+  deployed_files:
+  - .agents/skills/frontend-design
+  content_hash: sha256:880dd1dbc720f598083e2bc099fc66d8bd195c6b2bfc92381c73fed07ec6c0e4
+  discovered_via: claude-code-plugins
+  marketplace_plugin_name: frontend-design
+- repo_url: dotnet/skills
+  host: github.com
+  resolved_commit: 0f31228b586474b42873290c0f95aa8761846275
+  virtual_path: plugins/dotnet-aspnet
+  is_virtual: true
+  package_type: marketplace_plugin
+  deployed_files:
+  - .agents/skills/configuring-opentelemetry-dotnet
+  - .agents/skills/minimal-api-file-upload
+  content_hash: sha256:05e456043af4fd7503687126bd3ed0f3ec48d0a0022da15301e6b44924f22ae4
+  discovered_via: dotnet-agent-skills
+  marketplace_plugin_name: dotnet-aspnet

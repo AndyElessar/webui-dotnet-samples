@@ -1,4 +1,5 @@
 using Backend.Endpoints.Todos;
+using Backend.Endpoints.Planner;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,12 @@ builder.Services.AddScoped<WebUiApplication>();
 builder.Services.AddScoped<NonceProvider>();
 
 builder.Services.AddSingleton<TodoService>();
+builder.Services.AddSingleton<WeatherForecastService>();
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+});
 
 var app = builder.Build();
 
@@ -41,6 +48,7 @@ app.MapDefaultEndpoints();
 
 app.MapIndex()
     .MapWeather()
+    .MapPlanner()
     .MapTodos();
 
 app.Run();

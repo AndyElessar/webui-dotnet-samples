@@ -31,6 +31,33 @@
           <span>Completed</span>
         </label>
 
+        <label>
+          <span>Planner slot</span>
+          <select name="plannerSlot">
+            <option value="Morning" ?selected="{{plannerSlot == 'Morning'}}">Morning</option>
+            <option value="Afternoon" ?selected="{{plannerSlot == 'Afternoon'}}">Afternoon</option>
+            <option value="Evening" ?selected="{{plannerSlot == 'Evening'}}">Evening</option>
+            <option value="Done" ?selected="{{plannerSlot == 'Done'}}">Done</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Priority</span>
+          <select name="priority">
+            <option value="Normal" ?selected="{{priority == 'Normal'}}">Normal</option>
+            <option value="High" ?selected="{{priority == 'High'}}">High</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Weather fit</span>
+          <select name="weatherFit">
+            <option value="Focus block" ?selected="{{weatherFit == 'Focus block'}}">Focus block</option>
+            <option value="Field check" ?selected="{{weatherFit == 'Field check'}}">Field check</option>
+            <option value="Light admin" ?selected="{{weatherFit == 'Light admin'}}">Light admin</option>
+          </select>
+        </label>
+
         <div class="form-actions">
           <button type="submit">Save Changes</button>
           <a class="secondary-action" href="{{returnPath}}">Cancel</a>
@@ -50,6 +77,18 @@
           <div>
             <dt>Updated</dt>
             <dd>{{updatedAt}}</dd>
+          </div>
+          <div>
+            <dt>Planner slot</dt>
+            <dd>{{plannerSlot}}</dd>
+          </div>
+          <div>
+            <dt>Priority</dt>
+            <dd>{{priority}}</dd>
+          </div>
+          <div>
+            <dt>Weather fit</dt>
+            <dd>{{weatherFit}}</dd>
           </div>
         </dl>
         <form method="post" action="/todos/delete">

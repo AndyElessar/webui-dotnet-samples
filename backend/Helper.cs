@@ -1,6 +1,6 @@
 
-using System.Text.Json.Serialization;
 using Backend.Endpoints.Todos;
+using Backend.Endpoints.Planner;
 
 namespace Backend;
 
@@ -66,6 +66,9 @@ internal readonly record struct AntiforgeryTokenData(string FormFieldName, strin
 
 [JsonSerializable(typeof(IndexData))]
 [JsonSerializable(typeof(WeatherData))]
+[JsonSerializable(typeof(PlannerQueryResponse))]
+[JsonSerializable(typeof(PlannerTodoUpdateRequest))]
+[JsonSerializable(typeof(PlannerTodoUpdateResponse))]
 [JsonSerializable(typeof(TodosQueryRequest))]
 [JsonSerializable(typeof(TodosQueryResponse))]
 [JsonSerializable(typeof(TodoCreateRequest))]

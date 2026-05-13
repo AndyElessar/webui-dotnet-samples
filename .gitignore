@@ -26,3 +26,10 @@ dist-ssr
 # dotnet
 bin
 obj
+
+# apm
+/apm_modules
+
+
+# APM dependencies
+apm_modules/

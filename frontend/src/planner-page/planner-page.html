@@ -1,0 +1,158 @@
+<section class="planner-page" aria-label="Daily ops planner">
+  <header class="planner-hero">
+    <div class="hero-copy">
+      <p class="eyebrow">SSR dispatch desk</p>
+      <h1>Plan the day before JavaScript arrives.</h1>
+      <p class="deck">{{hydrationMessage}}</p>
+    </div>
+
+    <dl class="hero-metrics" aria-label="Planner metrics">
+      <div>
+        <dt>SSR at</dt>
+        <dd>{{generatedAt}}</dd>
+      </div>
+      <div>
+        <dt>Open</dt>
+        <dd>{{openCount}}</dd>
+      </div>
+      <div>
+        <dt>Done</dt>
+        <dd>{{completionRate}}%</dd>
+      </div>
+    </dl>
+  </header>
+
+  <section class="command-strip" aria-label="Planner controls">
+    <label class="search-field">
+      <span>Search board</span>
+      <input type="search" value="{{query}}" placeholder="Task, note, or fit" @input="{updateQuery(e)}" />
+    </label>
+
+    <div class="segment-control" aria-label="Task filters">
+      <button type="button" data-filter="all" ?data-active="{{filter == 'all'}}" @click="{setFilterFromEvent(e)}">All</button>
+      <button type="button" data-filter="open" ?data-active="{{filter == 'open'}}" @click="{setFilterFromEvent(e)}">Open</button>
+      <button type="button" data-filter="high" ?data-active="{{filter == 'high'}}" @click="{setFilterFromEvent(e)}">High</button>
+      <button type="button" data-filter="completed" ?data-active="{{filter == 'completed'}}" @click="{setFilterFromEvent(e)}">Done</button>
+    </div>
+
+    <button class="smart-button" type="button" @click="{smartPlan()}">Smart Plan</button>
+
+    <div class="save-notice" data-state="{{saveNoticeState}}" role="status" aria-live="assertive" aria-atomic="true">
+      <span>{{saveNoticeLabel}}</span>
+      <strong>{{saveNoticeMessage}}</strong>
+    </div>
+  </section>
+
+  <section class="weather-rail" aria-label="Weather selector">
+    <for each="forecast in forecasts">
+      <button class="weather-card" type="button" data-index="{{forecast.index}}" data-tone="{{forecast.tone}}" @click="{selectForecastFromEvent(e)}">
+        <span>{{forecast.label}}</span>
+        <strong>{{forecast.temperatureC}} C</strong>
+        <small>{{forecast.summary}}</small>
+      </button>
+    </for>
+  </section>
+
+  <section class="planner-layout">
+    <aside class="briefing-panel" aria-label="Hydration briefing">
+      <p class="eyebrow">Hydrated briefing</p>
+      <h2>{{selectedForecast.summary}}</h2>
+      <dl>
+        <div>
+          <dt>Date</dt>
+          <dd>{{selectedForecast.dateLabel}}</dd>
+        </div>
+        <div>
+          <dt>Risk</dt>
+          <dd>{{selectedForecast.riskLevel}}</dd>
+        </div>
+        <div>
+          <dt>Best slot</dt>
+          <dd>{{selectedForecast.recommendedSlot}}</dd>
+        </div>
+      </dl>
+      <div class="hydration-meter">
+        <span style="width: {{completionRate}}%"></span>
+      </div>
+      <p class="live-note">{{visibleCount}} visible tasks · {{interactionCount}} client interactions</p>
+      <a href="/todos">Manage source todos</a>
+    </aside>
+
+    <section class="board" aria-label="Planning board">
+      <article class="lane" data-slot="morning" @dragover="{allowDrop(e)}" @drop="{dropIntoFromEvent(e)}">
+        <header>
+          <span>06-12</span>
+          <h2>Morning focus</h2>
+        </header>
+        <if condition="morningTasks.length == 0">
+          <p class="empty-lane">Drop a task here.</p>
+        </if>
+        <for each="task in morningTasks">
+          <article class="task-card" draggable="true" data-task-id="{{task.id}}" data-priority="{{task.priority}}" @dragstart="{startDrag(e)}">
+            <span>{{task.priority}}</span>
+            <h3>{{task.title}}</h3>
+            <p>{{task.notes}}</p>
+            <small>{{task.weatherFit}} · {{task.updatedAt}}</small>
+            <button type="button" data-task-id="{{task.id}}" data-slot="done" @click="{moveTaskFromEvent(e)}">Mark done</button>
+          </article>
+        </for>
+      </article>
+
+      <article class="lane" data-slot="afternoon" @dragover="{allowDrop(e)}" @drop="{dropIntoFromEvent(e)}">
+        <header>
+          <span>12-17</span>
+          <h2>Afternoon field</h2>
+        </header>
+        <if condition="afternoonTasks.length == 0">
+          <p class="empty-lane">Drop a task here.</p>
+        </if>
+        <for each="task in afternoonTasks">
+          <article class="task-card" draggable="true" data-task-id="{{task.id}}" data-priority="{{task.priority}}" @dragstart="{startDrag(e)}">
+            <span>{{task.priority}}</span>
+            <h3>{{task.title}}</h3>
+            <p>{{task.notes}}</p>
+            <small>{{task.weatherFit}} · {{task.updatedAt}}</small>
+            <button type="button" data-task-id="{{task.id}}" data-slot="done" @click="{moveTaskFromEvent(e)}">Mark done</button>
+          </article>
+        </for>
+      </article>
+
+      <article class="lane" data-slot="evening" @dragover="{allowDrop(e)}" @drop="{dropIntoFromEvent(e)}">
+        <header>
+          <span>17-21</span>
+          <h2>Evening wrap</h2>
+        </header>
+        <if condition="eveningTasks.length == 0">
+          <p class="empty-lane">Drop a task here.</p>
+        </if>
+        <for each="task in eveningTasks">
+          <article class="task-card" draggable="true" data-task-id="{{task.id}}" data-priority="{{task.priority}}" @dragstart="{startDrag(e)}">
+            <span>{{task.priority}}</span>
+            <h3>{{task.title}}</h3>
+            <p>{{task.notes}}</p>
+            <small>{{task.weatherFit}} · {{task.updatedAt}}</small>
+            <button type="button" data-task-id="{{task.id}}" data-slot="done" @click="{moveTaskFromEvent(e)}">Mark done</button>
+          </article>
+        </for>
+      </article>
+
+      <article class="lane done-lane" data-slot="done" @dragover="{allowDrop(e)}" @drop="{dropIntoFromEvent(e)}">
+        <header>
+          <span>Closed</span>
+          <h2>Done</h2>
+        </header>
+        <if condition="doneTasks.length == 0">
+          <p class="empty-lane">Completed work lands here.</p>
+        </if>
+        <for each="task in doneTasks">
+          <article class="task-card" draggable="true" data-task-id="{{task.id}}" data-priority="{{task.priority}}" @dragstart="{startDrag(e)}">
+            <span>{{task.statusLabel}}</span>
+            <h3>{{task.title}}</h3>
+            <p>{{task.notes}}</p>
+            <small>{{task.weatherFit}} · {{task.updatedAt}}</small>
+          </article>
+        </for>
+      </article>
+    </section>
+  </section>
+</section>

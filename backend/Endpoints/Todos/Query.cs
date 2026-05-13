@@ -88,6 +88,7 @@ internal sealed record TodosQueryRequest(
     }
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter<TodosQueryFilter>))]
 internal enum TodosQueryFilter
 {
     All,

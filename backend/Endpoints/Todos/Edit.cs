@@ -1,5 +1,6 @@
 
 using System.Globalization;
+using Backend.Endpoints.Planner;
 
 namespace Backend.Endpoints.Todos;
 
@@ -25,6 +26,9 @@ static partial class Todos
                         string.Empty,
                         string.Empty,
                         string.Empty,
+                        string.Empty,
+                        string.Empty,
+                        string.Empty,
                         returnPath,
                         string.IsNullOrEmpty(errorMessage) ? "Todo was not found." : errorMessage ?? string.Empty,
                         antiforgeryToken)
@@ -41,9 +45,12 @@ static partial class Todos
                     todo.Title,
                     todo.Notes,
                     todo.Completed,
-                    todo.Completed ? "Completed" : "Open",
+                    todo.Completed ? "Completed" : "Not Completed",
                     FormatDate(todo.CreatedAt),
                     FormatDate(todo.UpdatedAt),
+                    todo.PlannerSlot.ToString(),
+                    todo.Priority.ToString(),
+                    todo.WeatherFit,
                     returnPath,
                     errorMessage ?? string.Empty,
                     antiforgeryToken);
@@ -57,7 +64,7 @@ static partial class Todos
                 return Results.Redirect(AddError(BuildEditPath(request.Id, request.ReturnPath), "Title is required."));
             }
 
-            if (!todoService.Update(request.Id, request.Title, request.Notes, request.Completed == true))
+            if (!todoService.Update(request.Id, request.Title, request.Notes, request.Completed == true, request.PlannerSlot, request.Priority, request.WeatherFit))
             {
                 return Results.Redirect(AddError("/todos", "Todo was not found."));
             }
@@ -83,6 +90,9 @@ internal sealed record TodoEditResponse(
     string StatusLabel,
     string CreatedAt,
     string UpdatedAt,
+    string PlannerSlot,
+    string Priority,
+    string WeatherFit,
     string ReturnPath,
     string? ErrorMessage,
     AntiforgeryTokenData AntiforgeryToken);
@@ -92,4 +102,7 @@ internal sealed record PostTodoEditRequest(
     [FromForm] string Title,
     [FromForm] string Notes,
     [FromForm] bool? Completed,
+    [FromForm] PlannerSlot PlannerSlot,
+    [FromForm] TodoPriority Priority,
+    [FromForm] string WeatherFit,
     [FromForm] string ReturnPath);

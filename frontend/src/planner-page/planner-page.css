@@ -1,0 +1,510 @@
+:host {
+  --paper: #f3ead8;
+  --paper-light: #fff8e8;
+  --ink: #151411;
+  --muted: #635a4d;
+  --line: rgba(21, 20, 17, 0.18);
+  --cobalt: #174d7c;
+  --signal: #c4432d;
+  --sun: #e4ad2f;
+  --mint: #7da88c;
+  display: block;
+  min-height: calc(100svh - 72px);
+  color: var(--ink);
+  background:
+    linear-gradient(90deg, rgba(21, 20, 17, 0.06) 1px, transparent 1px) 0 0 / 32px 32px,
+    radial-gradient(circle at 12% 16%, rgba(228, 173, 47, 0.22), transparent 28%),
+    linear-gradient(180deg, #f7efdf 0%, #ead9bd 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.planner-page {
+  width: min(1320px, calc(100% - 28px));
+  margin: 0 auto;
+  padding: 32px 0 46px;
+}
+
+.planner-hero,
+.command-strip,
+.weather-rail,
+.briefing-panel,
+.lane {
+  border: 1px solid var(--line);
+  background: rgba(255, 248, 232, 0.78);
+  box-shadow: 0 18px 48px rgba(69, 53, 31, 0.08);
+}
+
+.planner-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+  gap: clamp(22px, 5vw, 72px);
+  align-items: end;
+  overflow: hidden;
+  padding: clamp(28px, 5vw, 62px);
+}
+
+.planner-hero::before {
+  content: '';
+  position: absolute;
+  inset: 18px;
+  border: 1px dashed rgba(21, 20, 17, 0.22);
+  pointer-events: none;
+}
+
+.planner-hero::after {
+  content: 'LIVE AFTER HYDRATION';
+  position: absolute;
+  right: -58px;
+  top: 34px;
+  width: 260px;
+  padding: 8px 0;
+  background: var(--signal);
+  color: #fff8e8;
+  font: 900 0.72rem/1 "Bahnschrift", "Franklin Gothic Medium", sans-serif;
+  letter-spacing: 0.18em;
+  text-align: center;
+  transform: rotate(32deg);
+}
+
+.eyebrow,
+h1,
+h2,
+h3,
+p,
+dl,
+dd {
+  margin: 0;
+}
+
+.eyebrow {
+  color: var(--cobalt);
+  font: 900 0.74rem/1.2 "Bahnschrift", "Franklin Gothic Medium", sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+h1 {
+  max-width: 11ch;
+  margin-top: 14px;
+  font: 800 clamp(3rem, 7vw, 6.9rem)/0.88 "Iowan Old Style", "Palatino Linotype", serif;
+}
+
+.deck {
+  max-width: 56ch;
+  margin-top: 22px;
+  color: var(--muted);
+  font: 700 1rem/1.55 "Trebuchet MS", "Gill Sans", sans-serif;
+}
+
+.hero-metrics {
+  display: grid;
+  border: 1px solid rgba(21, 20, 17, 0.22);
+  background: rgba(243, 234, 216, 0.72);
+}
+
+.hero-metrics div,
+.briefing-panel dl div {
+  padding: 16px 18px;
+  border-top: 1px solid var(--line);
+}
+
+.hero-metrics div:first-child,
+.briefing-panel dl div:first-child {
+  border-top: 0;
+}
+
+dt {
+  color: var(--muted);
+  font: 900 0.68rem/1.2 "Trebuchet MS", "Gill Sans", sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+dd {
+  margin-top: 7px;
+  font: 900 1.65rem/1 "Bahnschrift", "Franklin Gothic Medium", sans-serif;
+}
+
+.command-strip {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto auto;
+  gap: 14px;
+  align-items: end;
+  margin-top: 16px;
+  padding: 16px;
+}
+
+.search-field {
+  display: grid;
+  gap: 8px;
+}
+
+.search-field span {
+  color: var(--muted);
+  font: 900 0.7rem/1.2 "Trebuchet MS", "Gill Sans", sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+input {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(21, 20, 17, 0.26);
+  background: var(--paper-light);
+  color: var(--ink);
+  padding: 0 12px;
+  font: 700 0.95rem/1.3 "Trebuchet MS", "Gill Sans", sans-serif;
+}
+
+button,
+.briefing-panel a {
+  min-height: 44px;
+  border: 1px solid rgba(21, 20, 17, 0.82);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  font: 900 0.72rem/1.1 "Trebuchet MS", "Gill Sans", sans-serif;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+button:focus-visible,
+input:focus-visible,
+.briefing-panel a:focus-visible {
+  outline: 3px solid rgba(196, 67, 45, 0.42);
+  outline-offset: 2px;
+}
+
+.segment-control {
+  display: inline-grid;
+  grid-template-columns: repeat(4, minmax(68px, 1fr));
+  border: 1px solid rgba(21, 20, 17, 0.22);
+}
+
+.segment-control button {
+  border: 0;
+  border-left: 1px solid var(--line);
+  background: rgba(255, 248, 232, 0.7);
+}
+
+.segment-control button:first-child {
+  border-left: 0;
+}
+
+.segment-control button[data-active],
+.smart-button,
+.task-card button:hover {
+  background: var(--ink);
+  color: var(--paper-light);
+}
+
+.smart-button {
+  padding: 0 18px;
+}
+
+.weather-rail {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(132px, 1fr));
+  gap: 1px;
+  margin-top: 16px;
+  padding: 1px;
+  background: var(--line);
+}
+
+.weather-card {
+  display: grid;
+  gap: 8px;
+  min-height: 132px;
+  border: 0;
+  background: rgba(255, 248, 232, 0.92);
+  padding: 16px;
+  text-align: left;
+}
+
+.weather-card[data-active] {
+  background: #172f42;
+  color: #fff8e8;
+}
+
+.weather-card span,
+.task-card span,
+.lane header span {
+  color: var(--signal);
+  font: 900 0.68rem/1.2 "Bahnschrift", "Franklin Gothic Medium", sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.weather-card[data-active] span,
+.weather-card[data-active] small {
+  color: #f0c35b;
+}
+
+.weather-card strong {
+  font: 900 2rem/0.95 "Bahnschrift", "Franklin Gothic Medium", sans-serif;
+}
+
+.weather-card small {
+  color: var(--muted);
+  font: 800 0.78rem/1.25 "Trebuchet MS", "Gill Sans", sans-serif;
+}
+
+.planner-layout {
+  display: grid;
+  grid-template-columns: 310px minmax(0, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.briefing-panel {
+  position: sticky;
+  top: 92px;
+  align-self: start;
+  padding: 22px;
+}
+
+.briefing-panel h2 {
+  margin-top: 12px;
+  font: 800 2.15rem/1 "Iowan Old Style", "Palatino Linotype", serif;
+}
+
+.briefing-panel dl {
+  margin-top: 18px;
+  border: 1px solid var(--line);
+}
+
+.hydration-meter {
+  height: 12px;
+  margin-top: 18px;
+  border: 1px solid rgba(21, 20, 17, 0.28);
+  background: rgba(21, 20, 17, 0.08);
+}
+
+.hydration-meter span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--signal), var(--sun), var(--mint));
+  transition: width 260ms ease;
+}
+
+.save-notice {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  min-height: 58px;
+  margin-top: 2px;
+  padding: 14px 18px;
+  border: 1px solid rgba(21, 20, 17, 0.26);
+  background: rgba(255, 248, 232, 0.86);
+  box-shadow: inset 5px 0 0 var(--cobalt);
+}
+
+.save-notice span {
+  color: var(--cobalt);
+  font: 900 0.68rem/1.2 "Bahnschrift", "Franklin Gothic Medium", sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.save-notice strong {
+  color: var(--ink);
+  font: 900 1.04rem/1.35 "Trebuchet MS", "Gill Sans", sans-serif;
+}
+
+.save-notice[data-state='saving'] {
+  background: rgba(228, 173, 47, 0.18);
+  box-shadow: inset 5px 0 0 var(--sun);
+}
+
+.save-notice[data-state='saving'] span {
+  color: #7b5a0f;
+}
+
+.save-notice[data-state='saved'] {
+  background: rgba(125, 168, 140, 0.2);
+  box-shadow: inset 5px 0 0 var(--mint);
+}
+
+.save-notice[data-state='saved'] span {
+  color: #476f57;
+}
+
+.save-notice[data-state='error'] {
+  border-color: rgba(196, 67, 45, 0.72);
+  background:
+    repeating-linear-gradient(-45deg, rgba(196, 67, 45, 0.12) 0 8px, transparent 8px 16px),
+    #fff0dc;
+  box-shadow: inset 8px 0 0 var(--signal), 0 16px 32px rgba(196, 67, 45, 0.24);
+  animation: save-alert-pulse 900ms ease-out 1;
+}
+
+.save-notice[data-state='error'] span {
+  color: var(--signal);
+}
+
+.save-notice[data-state='error'] strong {
+  color: #7c1d12;
+  font-size: 1.18rem;
+}
+
+@keyframes save-alert-pulse {
+  0% {
+    transform: translateY(-2px);
+    box-shadow: inset 8px 0 0 var(--signal), 0 0 0 rgba(196, 67, 45, 0);
+  }
+
+  55% {
+    transform: translateY(0);
+    box-shadow: inset 8px 0 0 var(--signal), 0 0 0 6px rgba(196, 67, 45, 0.16), 0 16px 32px rgba(196, 67, 45, 0.24);
+  }
+
+  100% {
+    transform: translateY(0);
+    box-shadow: inset 8px 0 0 var(--signal), 0 16px 32px rgba(196, 67, 45, 0.24);
+  }
+}
+
+.live-note {
+  margin-top: 14px;
+  color: var(--muted);
+  font: 800 0.84rem/1.55 "Trebuchet MS", "Gill Sans", sans-serif;
+}
+
+.briefing-panel a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 18px;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.lane {
+  min-height: 480px;
+  padding: 12px;
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.lane:hover {
+  background: rgba(255, 248, 232, 0.94);
+}
+
+.lane header {
+  display: grid;
+  gap: 6px;
+  padding: 8px 8px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.lane h2 {
+  font: 900 1.05rem/1.1 "Trebuchet MS", "Gill Sans", sans-serif;
+  letter-spacing: 0;
+}
+
+.task-card {
+  display: grid;
+  gap: 9px;
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid rgba(21, 20, 17, 0.22);
+  background:
+    linear-gradient(135deg, rgba(228, 173, 47, 0.16), transparent 38%),
+    var(--paper-light);
+  cursor: grab;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.task-card:hover {
+  transform: translateY(-2px) rotate(-0.4deg);
+  box-shadow: 0 18px 32px rgba(69, 53, 31, 0.12);
+}
+
+.task-card[data-priority='High'] {
+  border-left: 5px solid var(--signal);
+}
+
+.task-card h3 {
+  font: 900 1rem/1.18 "Trebuchet MS", "Gill Sans", sans-serif;
+}
+
+.task-card p {
+  min-height: 2.8em;
+  color: var(--muted);
+  font: 700 0.86rem/1.42 "Trebuchet MS", "Gill Sans", sans-serif;
+}
+
+.task-card small {
+  color: var(--cobalt);
+  font: 900 0.68rem/1.3 "Bahnschrift", "Franklin Gothic Medium", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.task-card button {
+  min-height: 36px;
+  margin-top: 2px;
+}
+
+.done-lane .task-card {
+  background: rgba(125, 168, 140, 0.16);
+}
+
+.done-lane h3 {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.empty-lane {
+  margin-top: 12px;
+  padding: 18px 12px;
+  border: 1px dashed rgba(21, 20, 17, 0.28);
+  color: var(--muted);
+  font: 900 0.78rem/1.4 "Trebuchet MS", "Gill Sans", sans-serif;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1060px) {
+  .planner-hero,
+  .planner-layout,
+  .command-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .briefing-panel {
+    position: static;
+  }
+
+  .board {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .weather-rail,
+  .board,
+  .segment-control,
+  .save-notice {
+    grid-template-columns: 1fr;
+  }
+
+  .planner-hero::after {
+    display: none;
+  }
+
+  h1 {
+    font-size: 3rem;
+  }
+}

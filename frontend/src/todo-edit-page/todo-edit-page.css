@@ -104,6 +104,7 @@ dt {
 }
 
 input,
+select,
 textarea {
   width: 100%;
   min-height: 44px;
@@ -113,7 +114,8 @@ textarea {
   font: 600 0.95rem/1.4 "Trebuchet MS", "Gill Sans", sans-serif;
 }
 
-input {
+input,
+select {
   padding: 0 12px;
 }
 

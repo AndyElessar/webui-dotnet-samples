@@ -1,0 +1,11 @@
+name: test-webui
+version: 0.0.1
+target:
+- copilot
+dependencies:
+  apm:
+  - anthropics/claude-code/plugins/frontend-design
+  - dotnet/skills/plugins/dotnet-aspnet
+  mcp: []
+includes: auto
+scripts: {}
