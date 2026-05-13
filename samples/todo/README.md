@@ -19,6 +19,10 @@ aspire start
 
 The backend build also handles the frontend. If the WebUI CLI package has not been installed yet, the build runs `npm ci` in `frontend`, then runs `npm run build`, and finally copies the output into the backend `webui` static assets directory.
 
+## Local Package Note
+
+This sample currently depends on a checked-in local `Microsoft.WebUI.0.0.12.nupkg` package from the repository root because `Microsoft.WebUI` has not been published to NuGet yet. The package was built locally for this repo. When the package is available on NuGet, this sample will be updated to consume the official published package instead.
+
 ## App Features
 
 ### Todo CRUD
