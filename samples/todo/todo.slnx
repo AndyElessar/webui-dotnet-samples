@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/aspire/">
+    <Project Path="aspire/apphost/apphost.csproj" />
+  </Folder>
+  <Project Path="backend/backend.csproj" />
+  <Folder Name="/shared/">
+    <Project Path="../../shared/service-defaults/service-defaults.csproj" />
+  </Folder>
+</Solution>

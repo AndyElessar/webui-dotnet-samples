@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\aspire\service-defaults\service-defaults.csproj" />
+    <ProjectReference Include="..\..\..\shared\service-defaults\service-defaults.csproj" />
   </ItemGroup>
 
   <Target
