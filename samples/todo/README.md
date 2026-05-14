@@ -1,6 +1,6 @@
 # Todo WebUI Demo
 
-This sample shows how `microsoft/webui`, ASP.NET Core, and Aspire can be combined into a runnable todo app. The ASP.NET Core backend handles server-side rendering, form posts, JSON state, and static assets; the WebUI frontend provides hydrated client-side interactions; Aspire runs the local AppHost, backend resource, and dashboard.
+This sample shows how [microsoft/webui](https://github.com/microsoft/webui), ASP.NET Core, and Aspire can be combined into a runnable todo app. The ASP.NET Core backend handles server-side rendering, form posts, JSON state, and static assets; the WebUI frontend provides hydrated client-side interactions; Aspire runs the local AppHost, backend resource, and dashboard.
 
 ## Running the App
 
@@ -18,10 +18,6 @@ aspire start
 ```
 
 The backend build also handles the frontend. If the WebUI CLI package has not been installed yet, the build runs `npm ci` in `frontend`, then runs `npm run build`, and finally copies the output into the backend `webui` static assets directory.
-
-## Local Package Note
-
-This sample currently depends on a checked-in local `Microsoft.WebUI.0.0.12.nupkg` package from the repository root because `Microsoft.WebUI` has not been published to NuGet yet. The package was built locally for this repo. When the package is available on NuGet, this sample will be updated to consume the official published package instead.
 
 ## App Features
 
@@ -70,10 +66,6 @@ samples/todo/
 ```bash
 # Start the full Aspire app from the sample directory
 aspire start
-
-# Type-check only the frontend TypeScript
-cd frontend
-npm run typecheck
 
 # Build frontend WebUI assets
 npm run build
