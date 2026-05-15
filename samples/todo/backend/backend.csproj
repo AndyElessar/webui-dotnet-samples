@@ -7,7 +7,7 @@
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <PublishAOT>true</PublishAOT>
     <FrontendProjectDir>$(MSBuildProjectDirectory)\..\frontend\</FrontendProjectDir>
-    <FrontendDistDir>$(FrontendProjectDir)dist\</FrontendDistDir>
+    <FrontendDistDir>$(FrontendProjectDir)dist\prod\</FrontendDistDir>
     <FrontendWebUiCliPackage>$(FrontendProjectDir)node_modules\@microsoft\webui\package.json</FrontendWebUiCliPackage>
   </PropertyGroup>
 

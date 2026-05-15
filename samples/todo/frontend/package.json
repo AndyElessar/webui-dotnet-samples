@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "dotnet watch --project ../backend/backend.csproj run",
-    "dev:client": "tsdown --config ./tsdown.config.mjs --out-dir ./public --sourcemap --watch",
+    "dev:client": "tsdown --config ./tsdown.config.ts --out-dir ./dist/dev --sourcemap --watch",
     "typecheck": "tsgo -p tsconfig.json",
-    "build:client": "tsdown --config ./tsdown.config.mjs --out-dir ./public --sourcemap",
-    "build:client:dist": "tsdown --config ./tsdown.config.mjs --out-dir ./dist --minify",
-    "build": "npm run typecheck && npm run build:client:dist && webui build ./src --out ./dist --plugin=webui"
+    "build:client": "tsdown --config ./tsdown.config.ts --out-dir ./dist/dev --sourcemap",
+    "build:client:dist": "tsdown --config ./tsdown.config.ts --out-dir ./dist/prod --minify",
+    "build": "npm run typecheck && npm run build:client:dist && webui build ./src --out ./dist/prod --plugin=webui"
   },
   "devDependencies": {
     "@microsoft/webui": "latest",

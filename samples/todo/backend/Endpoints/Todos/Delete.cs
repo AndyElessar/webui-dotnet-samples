@@ -11,10 +11,10 @@ static partial class Todos
 
             if (!todoService.Delete(request.Id))
             {
-                return Results.Redirect(AddError(returnPath, "Todo was not found."));
+                return TypedResults.Redirect(AddError(returnPath, "Todo was not found."));
             }
 
-            return Results.Redirect(returnPath);
+            return TypedResults.Redirect(returnPath);
         });
 
         return app;

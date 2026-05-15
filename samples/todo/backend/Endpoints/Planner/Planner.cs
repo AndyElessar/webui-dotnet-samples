@@ -28,13 +28,8 @@ internal enum PlannerSlot
     Done
 }
 
-internal sealed class PlannerSlotJsonConverter : JsonStringEnumConverter<PlannerSlot>
-{
-    public PlannerSlotJsonConverter()
-        : base(JsonNamingPolicy.CamelCase)
-    {
-    }
-}
+internal sealed class PlannerSlotJsonConverter()
+    : JsonStringEnumConverter<PlannerSlot>(JsonNamingPolicy.CamelCase);
 
 [JsonConverter(typeof(JsonStringEnumConverter<PlannerFilter>))]
 internal enum PlannerFilter

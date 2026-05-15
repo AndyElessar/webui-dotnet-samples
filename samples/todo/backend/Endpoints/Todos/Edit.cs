@@ -1,5 +1,3 @@
-
-using System.Globalization;
 using Backend.Endpoints.Planner;
 
 namespace Backend.Endpoints.Todos;
@@ -61,15 +59,15 @@ static partial class Todos
         {
             if (string.IsNullOrEmpty(request.Title))
             {
-                return Results.Redirect(AddError(BuildEditPath(request.Id, request.ReturnPath), "Title is required."));
+                return TypedResults.Redirect(AddError(BuildEditPath(request.Id, request.ReturnPath), "Title is required."));
             }
 
             if (!todoService.Update(request.Id, request.Title, request.Notes, request.Completed == true, request.PlannerSlot, request.Priority, request.WeatherFit))
             {
-                return Results.Redirect(AddError("/todos", "Todo was not found."));
+                return TypedResults.Redirect(AddError("/todos", "Todo was not found."));
             }
 
-            return Results.Redirect(request.ReturnPath);
+            return TypedResults.Redirect(request.ReturnPath);
         });
 
         return app;
