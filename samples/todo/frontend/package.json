@@ -12,11 +12,11 @@
     "build": "npm run typecheck && npm run build:client:dist && webui build ./src --out ./dist/prod --plugin=webui"
   },
   "devDependencies": {
-    "@microsoft/webui": "latest",
-    "@typescript/native-preview": "^7.0.0-dev.20260510.1",
-    "tsdown": "^0.22.0"
+    "@microsoft/webui": "0.0.26",
+    "@typescript/native-preview": "7.0.0-dev.20260707.2",
+    "tsdown": "0.23.0"
   },
   "dependencies": {
-    "@microsoft/webui-framework": "latest"
+    "@microsoft/webui-framework": "0.0.26"
   }
 }

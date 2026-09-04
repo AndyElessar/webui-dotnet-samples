@@ -5,7 +5,8 @@ target:
 dependencies:
   apm:
   - anthropics/claude-code/plugins/frontend-design
-  - dotnet/skills/plugins/dotnet-aspnet
+  - dotnet/skills/plugins/dotnet-aspnetcore
+  - microsoft/aspire-skills
   mcp: []
 includes: auto
 scripts: {}

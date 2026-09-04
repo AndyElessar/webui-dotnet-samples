@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.WebUI" Version="0.0.12" />
+    <PackageReference Include="Microsoft.WebUI" Version="0.0.26" />
   </ItemGroup>
 
   <ItemGroup>

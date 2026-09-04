@@ -35,10 +35,3 @@ aspire start
 ```
 
 For details about running and using the todo app, see [`samples/todo/README.md`](samples/todo/README.md).
-
-## Microsoft.WebUI Package Source
-> [!NOTE]
-> The repository currently includes a checked-in local package, `Microsoft.WebUI.0.0.12.nupkg`, because `Microsoft.WebUI` has not been published to NuGet yet.
-> - `NuGet.config` points to the repository root as a local package source.
-> - The included `.nupkg` was built locally for this sample repository.
-> - Once `Microsoft.WebUI` is published to NuGet, the sample will switch to the official NuGet package source instead of the checked-in package.

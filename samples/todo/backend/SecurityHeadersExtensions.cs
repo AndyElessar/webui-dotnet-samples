@@ -1,10 +1,8 @@
-using System.Security.Cryptography;
-
 namespace Backend;
 
 internal static class SecurityHeadersExtensions
 {
-    private const string ContentSecurityPolicy = "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; style-src 'self' 'unsafe-inline'; connect-src 'self'; script-src 'self' ";
+    private const string ContentSecurityPolicy = "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; style-src 'self' 'unsafe-inline'; connect-src 'self'; script-src 'self' 'unsafe-inline';";
 
     public static IApplicationBuilder UseAppSecurityHeaders(this IApplicationBuilder app)
     {
@@ -14,9 +12,7 @@ internal static class SecurityHeadersExtensions
             {
                 var httpContext = (HttpContext)state;
                 var headers = httpContext.Response.Headers;
-                var nonce = httpContext.RequestServices.GetRequiredService<NonceProvider>().Nonce;
-
-                headers.ContentSecurityPolicy = ContentSecurityPolicy + $"'nonce-{nonce}';";
+                headers.ContentSecurityPolicy = ContentSecurityPolicy;
                 headers["Referrer-Policy"] = "no-referrer";
                 headers.XContentTypeOptions = "nosniff";
                 headers.XFrameOptions = "DENY";
@@ -30,18 +26,5 @@ internal static class SecurityHeadersExtensions
 
             await next();
         });
-    }
-}
-
-internal sealed class NonceProvider
-{
-    public string Nonce { get; private set; }
-
-    public NonceProvider()
-    {
-        using var rng = RandomNumberGenerator.Create();
-        var nonceBytes = new byte[32];
-        rng.GetBytes(nonceBytes);
-        Nonce = Convert.ToBase64String(nonceBytes);
     }
 }

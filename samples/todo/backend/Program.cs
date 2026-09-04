@@ -17,7 +17,6 @@ builder.Services.AddHsts(options =>
 var webuiAssetsPath = Path.Combine(AppContext.BaseDirectory, "webui");
 builder.Services.AddSingleton(new WebUiProtocolProvider(webuiAssetsPath));
 builder.Services.AddScoped<WebUiApplication>();
-builder.Services.AddScoped<NonceProvider>();
 
 builder.Services.AddSingleton<TodoService>();
 builder.Services.AddSingleton<WeatherForecastService>();

@@ -1,9 +1,9 @@
 
 namespace Backend;
 
-internal sealed class WebUiProtocolProvider
+internal sealed class WebUiProtocolProvider : IDisposable
 {
-    public byte[] Protocol { get; }
+    public Protocol Protocol { get; }
 
     public WebUiProtocolProvider(string assetsPath)
     {
@@ -19,7 +19,12 @@ internal sealed class WebUiProtocolProvider
             throw new FileNotFoundException("WebUI protocol.bin was not found.", protocolPath);
         }
 
-        Protocol = File.ReadAllBytes(protocolPath);
+        Protocol = new Protocol(File.ReadAllBytes(protocolPath));
+    }
+
+    public void Dispose()
+    {
+        Protocol.Dispose();
     }
 }
 
@@ -29,12 +34,9 @@ internal sealed class WebUiApplication : IDisposable
     private readonly WebUiProtocolProvider protocolProvider;
 
     private readonly WebUIHandler handler;
-    private readonly NonceProvider nonceProvider;
-
-    public WebUiApplication(WebUiProtocolProvider webUiProtocolProvider, NonceProvider nonceProvider)
+    public WebUiApplication(WebUiProtocolProvider webUiProtocolProvider)
     {
         protocolProvider = webUiProtocolProvider;
-        this.nonceProvider = nonceProvider;
         try
         {
             handler = new WebUIHandler("webui");
@@ -53,21 +55,14 @@ internal sealed class WebUiApplication : IDisposable
         }
     }
 
-    private void SetNonce()
-    {
-        handler.SetNonce(nonceProvider.Nonce);
-    }
-
     public string RenderHtml(string stateJson, string requestPath)
     {
-        SetNonce();
         return handler.Render(protocolProvider.Protocol, stateJson, EntryTemplate, requestPath);
     }
 
     public string RenderPartial(string stateJson, string requestPath, string inventory)
     {
-        SetNonce();
-        return handler.RenderPartial(protocolProvider.Protocol, stateJson, EntryTemplate, requestPath, inventory);
+        return protocolProvider.Protocol.RenderPartial(stateJson, EntryTemplate, requestPath, inventory);
     }
 
     public void Dispose()
