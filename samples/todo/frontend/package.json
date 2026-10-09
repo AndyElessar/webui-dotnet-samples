@@ -6,17 +6,17 @@
   "scripts": {
     "dev": "dotnet watch --project ../backend/backend.csproj run",
     "dev:client": "tsdown --config ./tsdown.config.ts --out-dir ./dist/dev --sourcemap --watch",
-    "typecheck": "tsgo -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json",
     "build:client": "tsdown --config ./tsdown.config.ts --out-dir ./dist/dev --sourcemap",
     "build:client:dist": "tsdown --config ./tsdown.config.ts --out-dir ./dist/prod --minify",
     "build": "npm run typecheck && npm run build:client:dist && webui build ./src --out ./dist/prod --plugin=webui"
   },
   "devDependencies": {
-    "@microsoft/webui": "0.0.26",
+    "@microsoft/webui": "3.0.0",
     "typescript": "7.0.2",
     "tsdown": "0.23.0"
   },
   "dependencies": {
-    "@microsoft/webui-framework": "0.0.26"
+    "@microsoft/webui-framework": "3.0.0"
   }
 }
