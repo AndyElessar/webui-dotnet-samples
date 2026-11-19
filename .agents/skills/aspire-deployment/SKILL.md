@@ -4,14 +4,14 @@ description: "**WORKFLOW SKILL** — Deploy Aspire apps from AppHost models to D
 license: MIT
 metadata:
   author: Microsoft
-  version: "0.0.2"
+  version: "0.0.6"
 ---
 
 # Aspire Deployment
 
 Use this skill when the task is to publish, preview, validate, deploy, or tear down an Aspire application deployment. This skill owns Aspire deployment routing. Do not start with a generic Azure, Docker, Kubernetes, Helm, or Bicep workflow until you have checked whether the workspace is an Aspire app.
 
-Aspire deployment starts from the AppHost model. Treat `aspire deploy`, `aspire publish`, `aspire destroy`, `aspire do`, and the deployment environment resources in the AppHost as the primary path. This guidance targets Aspire 13.5.3: use stable 13.5.3 SDK/hosting packages and matching `13.5.3-preview.*` builds for preview-only integrations such as Kubernetes and Radius.
+Aspire deployment starts from the AppHost model. Treat `aspire deploy`, `aspire publish`, `aspire destroy`, `aspire do`, and the deployment environment resources in the AppHost as the primary path. Use stable SDK/hosting packages from the project's release family and matching preview builds for preview-only integrations such as Kubernetes and Radius.
 
 Keep this as one skill with target-specific references. Load only the reference files that match the target you discover or the user requests.
 
@@ -22,7 +22,7 @@ This skill wins over generic cloud deployment skills when both conditions are tr
 1. The user asks to deploy, publish, generate deployment artifacts, create Bicep/Helm/Compose/CDK output, host on Azure or AWS, deploy to Azure, AWS, Kubernetes, Docker Compose, or Radius, tear down deployed resources, or validate a deployment.
 2. The workspace has Aspire markers:
    - Aspire workspace configuration
-   - C# or TypeScript AppHost files
+   - C#, TypeScript, or Go AppHost files
    - an AppHost project
    - AppHost code using Aspire distributed application builder APIs
 
@@ -46,17 +46,22 @@ aspire docs get "deploy-to-azure-kubernetes-service-aks"
 aspire docs get "<slug-from-search-results>"
 ```
 
-When you need exact C# or TypeScript API shape, use API docs too. Search both languages when you are not sure which AppHost language the repo uses:
+When you need exact C#, TypeScript, or Go API shape, use API docs too. Search each language that could apply when you are not sure which AppHost language the repo uses. Go AppHosts require Aspire 17.0 or later, and `--language go` needs the 17.0 CLI:
 
 ```bash
 aspire docs api search "<deployment API or concept>" --language csharp
 aspire docs api search "<deployment API or concept>" --language typescript
+aspire docs api search "<deployment API or concept>" --language go
 aspire docs api get "<id-from-api-search>"
 ```
 
-Do not invent package names, builder methods, overloads, or deployment commands. API shapes differ between C# and TypeScript AppHosts.
+Do not invent package names, builder methods, overloads, or deployment commands. API shapes differ between C#, TypeScript, and Go AppHosts.
 
 ### Prefer Aspire-native deployment
+
+Deploy the resources declared in the AppHost, not the AppHost process itself.
+For Docker Compose, configure the Compose environment and let Aspire generate services
+for those resources; do not replace this with an AppHost Dockerfile or Compose service.
 
 Use Aspire deployment targets and CLI commands first:
 
@@ -114,10 +119,10 @@ The Azure deployment path in this skill is `aspire add <azure-target>`, AppHost 
 
 ### Keep Aspire packages on one release family
 
-Before publish or deploy, verify that `Aspire.AppHost.Sdk` and every hosting package use
-the matching 13.5 servicing line. Stable packages should be 13.5.3; preview-only
-integrations use matching `13.5.3-preview.*` builds selected by `aspire add` or current
-docs. A 13.5 CLI does not make mixed 13.4/13.5 hosting packages safe; mixed graphs can
+Before publish or deploy, verify that `Aspire.AppHost.Sdk` and the hosting packages use
+compatible versions in the project's selected release family. Preview-only integrations
+need compatible preview builds selected by `aspire add` or integration docs.
+The CLI version does not make incompatible hosting packages safe; mixed graphs can
 fail at startup with `MissingMethodException` or `TypeLoadException`.
 
 Migrate obsolete 13.5 surfaces while editing deployment code:
@@ -131,7 +136,7 @@ Migrate obsolete 13.5 surfaces while editing deployment code:
 1. **Orient to the Aspire workspace.**
    - Start with `aspire ls` to list AppHosts in the current scope, then use `aspire.config.json`, AppHost project files, or `aspire ps` if more context is needed.
    - If no AppHost exists, stop deployment work and invoke the `aspireify` skill to initialize/wire the AppHost before continuing.
-   - Identify C# vs TypeScript AppHost.
+   - Identify the AppHost language: C#, TypeScript, or Go (`apphost.go`).
    - Prefer Aspire CLI commands for discovery and state inspection.
 2. **Clarify or infer the deployment target.**
    - If the user named Docker Compose, Kubernetes, Azure Container Apps, Azure App Service, Azure Kubernetes Service (AKS), or AWS, load that target reference without asking again.
@@ -153,7 +158,7 @@ Migrate obsolete 13.5 surfaces while editing deployment code:
 5. **Apply the target code changes.**
    - Run the target's `aspire add ...` command if the integration is missing.
    - Add the deployment environment resource to the AppHost.
-   - Do not add explicit compute-environment assignment for the common single-environment case. Only disambiguate when the AppHost has multiple deployment environments. In C# this is usually `WithComputeEnvironment(...)`; for TypeScript AppHosts, verify the current language-specific docs before assuming an equivalent.
+   - Do not add explicit compute-environment assignment for the common single-environment case. Only disambiguate when the AppHost has multiple deployment environments. In C# or Go this is usually `WithComputeEnvironment(...)`; for TypeScript AppHosts, verify the current language-specific docs before assuming an equivalent.
    - Add only the target-specific customization APIs the deployment needs, such as endpoint exposure, Helm settings, Compose file customization, Azure site/container app customization, or AWS publish target overrides.
 6. **Preflight the deployment model.**
    - Confirm the target integration package exists in the AppHost.
@@ -218,7 +223,7 @@ Use `aspire secret list` for AppHost user secrets when appropriate, but do not p
 - [references/javascript.md](references/javascript.md) - JavaScript app deployment models, including Vite/static assets, Node/SSR servers, Next.js, and gateway/backend serving patterns.
 - [references/cicd.md](references/cicd.md) - CI/CD and GitHub Actions workflow guidance for Aspire publish/deploy, parameters, secrets, registry auth, and cloud auth.
 - [references/preflight.md](references/preflight.md) - Common preflight, preview, parameter, destroy, and validation checklist.
-- [aspire-13-5-breaking-changes.md](https://github.com/microsoft/aspire-skills/blob/main/skills/aspire/references/aspire-13-5-breaking-changes.md) - 13.5.3 package, API, and CLI migration rules.
+- [aspire-13-5-breaking-changes.md](https://github.com/microsoft/aspire-skills/blob/main/skills/aspire/references/aspire-13-5-breaking-changes.md) - 13.5 package, API, and CLI migration rules.
 
 ## Agent execution
 
@@ -240,7 +245,12 @@ Prefer surfacing prompt-driving values up front (target subscription/region/reso
 
 ## Project-Local Skill Override
 
-If `.agents/skills/aspire-deployment/SKILL.md` exists (dropped by `aspire agent init`),
-prefer it over this plugin skill — it is the authoritative project-local version with
-content version-aligned to the consumer's Aspire CLI. This plugin skill is the always-on
-safety net for repos that have not yet run `aspire agent init`.
+If `.agents/skills/aspire-deployment/SKILL.md` exists, check `aspire --version`.
+
+- **Aspire 13.6 and earlier:** `aspire agent init` installed it. Prefer it over this plugin
+  skill. It is the authoritative project-local version, with content version-aligned to the
+  user's Aspire CLI. This plugin skill is the always-on safety net for repos that have not
+  yet run `aspire agent init`.
+- **Aspire 17.0 and later:** Aspire registers this plugin instead, so treat the copy as
+  stale unless the user says they maintain it. Use this skill, tell the user the copy is
+  stale, and suggest `aspire doctor`, which lists each copy and explains how to remove it.

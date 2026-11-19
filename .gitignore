@@ -29,6 +29,8 @@ obj
 
 # apm
 /apm_modules
+.agents/skills/*/evals/
+.claude/skills/*/evals/
 
 # APM dependencies
 apm_modules/

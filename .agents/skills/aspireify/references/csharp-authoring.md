@@ -26,13 +26,20 @@ builder.AddProject<Projects.Worker>("worker")
     .WithReference(pg)
     .WaitFor(pg);
 
+#pragma warning disable ASPIREJAVASCRIPT001, ASPIREBROWSERLOGS001 // experimental APIs
 builder.AddNextJsApp("web", "../web")
     .WithReference(api)
     .WaitFor(api)
     .WithBrowserLogs();
+#pragma warning restore ASPIREJAVASCRIPT001, ASPIREBROWSERLOGS001
 
 builder.Build().Run();
 ```
+
+`WithBrowserLogs()` comes from the `Aspire.Hosting.Browsers` package (`aspire add browsers`;
+preview in 13.6). `AddNextJsApp` (`ASPIREJAVASCRIPT001`) and `WithBrowserLogs`
+(`ASPIREBROWSERLOGS001`) are experimental and fail the build unless those diagnostics are
+suppressed — scope the `#pragma` to the calls that need it.
 
 The `Projects.X` strongly-typed reference comes from the SDK — `<Sdk Name="Aspire.AppHost.Sdk" />`
 in `.csproj` and `<ProjectReference>` for each project.
@@ -52,12 +59,18 @@ builder.AddProject("api", "../Api/Api.csproj")
 
 Top of file uses `#:sdk` and `#:package` directives — no `.csproj` required:
 
+Replace the version placeholders with the AppHost's selected Aspire release and compatible
+package versions — `#:sdk` needs an explicit version (`Aspire.AppHost.Sdk@13.6.4`) or the
+build cannot resolve the SDK. `aspire add <integration>` writes a matching `#:package`
+directive, including preview-only packages such as `Aspire.Hosting.Browsers`.
+
 ```csharp
-#:sdk Aspire.AppHost.Sdk
+#:sdk Aspire.AppHost.Sdk@<aspire-version>
 #:property AspireUseCliBundle=true
-#:package Aspire.Hosting.PostgreSQL@13.5.3
-#:package Aspire.Hosting.Redis@13.5.3
-#:package Aspire.Hosting.JavaScript@13.5.3
+#:package Aspire.Hosting.PostgreSQL@<postgres-package-version>
+#:package Aspire.Hosting.Redis@<redis-package-version>
+#:package Aspire.Hosting.JavaScript@<javascript-package-version>
+#:package Aspire.Hosting.Browsers@<browsers-package-version>
 
 var builder = DistributedApplication.CreateBuilder(args);
 
@@ -69,9 +82,11 @@ var api = builder.AddProject("api", "../Api/Api.csproj")
     .WithReference(cache)
     .WithExternalHttpEndpoints();
 
+#pragma warning disable ASPIREJAVASCRIPT001, ASPIREBROWSERLOGS001 // experimental APIs
 builder.AddNextJsApp("web", "../web")
     .WithReference(api)
     .WithBrowserLogs();
+#pragma warning restore ASPIREJAVASCRIPT001, ASPIREBROWSERLOGS001
 
 builder.Build().Run();
 ```
@@ -86,7 +101,7 @@ the path overload of `AddProject`.
 | `AddProject<T>(name)` / `AddProject(name, path)` | Add a .NET project |
 | `AddContainer(name, image)` | Add a container |
 | `AddDockerfile(name, contextPath)` | Build from a Dockerfile |
-| `AddNodeApp(name, scriptPath)` | Plain Node service |
+| `AddNodeApp(name, appDirectory, scriptPath)` | Plain Node service |
 | `AddNextJsApp(name, projectPath)` | Next.js with auto standalone publish |
 | `AddViteApp(name, projectPath)` | Vite app — pair with `PublishAsStaticWebsite` |
 | `AddPostgres` / `AddRedis` / `AddMongoDB` / `AddRabbitMQ` / `AddSqlServer` / `AddMySql` / `AddKafka` | Datastores & messaging |
@@ -149,8 +164,10 @@ needed. Set `output: "standalone"` in `next.config.js`.
 ## Browser Logs
 
 ```csharp
+#pragma warning disable ASPIREBROWSERLOGS001 // WithBrowserLogs is experimental
 builder.AddViteApp("frontend", "../frontend")
     .WithBrowserLogs();   // Aspire.Hosting.Browsers — adds console + screenshots to dashboard
+#pragma warning restore ASPIREBROWSERLOGS001
 ```
 
 ## Azure-Specific
@@ -161,14 +178,47 @@ builder.AddViteApp("frontend", "../frontend")
 | `AddNetworkSecurityPerimeter("nsp").WithAccessRule(...)` + `resource.WithNetworkSecurityPerimeter(nsp)` | NSP for Storage / Key Vault / Cosmos / SQL |
 | `AddAzureKubernetesEnvironment("aks").WithSystemNodePool(sku, minCount, maxCount)` | AKS hosting |
 | `AddPromptAgent(...)` | Azure AI Foundry Prompt Agent (replaces non-functional `AddAndPublishPromptAgent`) |
-| `resource.WithPrivateEndpoint()` | Now supported on ACR, Azure OpenAI, AI Foundry |
+| `var subnet = builder.AddAzureVirtualNetwork("vnet").AddSubnet("pe", "10.0.1.0/24");` + `subnet.AddPrivateEndpoint(acr)` | Private endpoint from a subnet to a supported target such as ACR, Azure OpenAI, or AI Foundry (`Aspire.Hosting.Azure.Network`) |
+
+Virtual network, subnet, private endpoint, and NSP APIs come from `Aspire.Hosting.Azure.Network`.
+Target packages such as ACR, Azure OpenAI, and Foundry do not reference it, so add it to the AppHost
+with the same version as its other Aspire packages:
+
+```xml
+<PackageReference Include="Aspire.Hosting.Azure.Network" Version="<aspire-package-version>" />
+```
+
+```csharp
+#:package Aspire.Hosting.Azure.Network@<aspire-package-version>
+```
+
+`Aspire.Hosting.Azure.Network` is experimental, so its APIs raise the `ASPIREAZURE003` diagnostic
+as a compile error. Opt in around the calls:
+
+```csharp
+#pragma warning disable ASPIREAZURE003
+var subnet = builder.AddAzureVirtualNetwork("vnet").AddSubnet("pe", "10.0.1.0/24");
+subnet.AddPrivateEndpoint(acr);
+#pragma warning restore ASPIREAZURE003
+```
 
 ## Lifecycle Hooks
 
 ```csharp
-builder.SubscribeBeforeStart(async e => { /* runs before resources start */ });
-builder.SubscribeAfterResourcesCreated(async e => { /* runs after creation */ });
+builder.Eventing.Subscribe<BeforeStartEvent>((e, ct) =>
+{
+    // runs before resources start
+    return Task.CompletedTask;
+});
+builder.Eventing.Subscribe<AfterResourcesCreatedEvent>((e, ct) =>
+{
+    // runs after resources are created
+    return Task.CompletedTask;
+});
 ```
+
+`subscribeBeforeStart` and `subscribeAfterResourcesCreated` are TypeScript AppHost
+APIs; C# AppHosts have no `builder.SubscribeBeforeStart` method.
 
 ## HTTP Commands
 
@@ -221,16 +271,8 @@ noninteractive path before calling prompt APIs.
 
 ## Experimental Terminals
 
-`WithTerminal()` exposes an interactive dashboard/CLI terminal. Suppress
-`ASPIRETERMINAL001`, keep `Columns` and `Rows` positive, and do not generate the removed
-`TerminalOptions.Shell` property:
-
-```csharp
-#pragma warning disable ASPIRETERMINAL001
-builder.AddContainer("repl", "my-repl")
-    .WithTerminal(options =>
-    {
-        options.Columns = 120;
-        options.Rows = 30;
-    });
-```
+Invoke [`aspire-terminals`](https://github.com/microsoft/aspire-skills/blob/main/skills/aspire-terminals/SKILL.md)
+for resource `WithTerminal`, auxiliary `TerminalService` dock/dialog/headless
+sessions, terminal prompts, REPLs and automation. It owns the capability checks,
+narrowly paired `ASPIRETERMINAL001` suppression and process lifetimes.
+Nonterminal Interaction Service prompts remain in this skill.

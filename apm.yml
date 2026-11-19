@@ -2,11 +2,22 @@ name: webui-dotnet-samples
 version: 0.0.1
 target:
 - copilot
+- claude
 dependencies:
   apm:
-  - anthropics/claude-code/plugins/frontend-design
   - dotnet/skills/plugins/dotnet-aspnetcore
   - microsoft/aspire-skills
   mcp: []
 includes: auto
 scripts: {}
+lifecycle:
+  post-install:
+  - type: command
+    description: Remove evals folders from deployed skills
+    bash: find .agents/skills .claude/skills -mindepth 2 -maxdepth 2 -type d -name evals -prune -exec rm -rf {} + 2>/dev/null || true
+    timeoutSec: 30
+  post-update:
+  - type: command
+    description: Remove evals folders from deployed skills
+    bash: find .agents/skills .claude/skills -mindepth 2 -maxdepth 2 -type d -name evals -prune -exec rm -rf {} + 2>/dev/null || true
+    timeoutSec: 30
