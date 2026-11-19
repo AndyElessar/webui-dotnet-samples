@@ -7,6 +7,7 @@ dependencies:
   apm:
   - dotnet/skills/plugins/dotnet-aspnetcore
   - microsoft/aspire-skills
+  - GoogleChrome/modern-web-guidance/skills/modern-web-guidance
   mcp: []
 includes: auto
 scripts: {}

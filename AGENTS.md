@@ -25,7 +25,7 @@ Use #tool:browser to test and interact with the app.
 
 - Minimal API should use `TypeResults` instead of `Results` to enable better OpenAPI generation.
 - Backend should always be compatible with Native AOT for best performance. Which means use Source Generators as much as possible and avoid using reflection.
-- When designing frontend components, load skill: `frontend-design`. Use #tool:browser to test and iterate on the design.
+- When building or modifying frontend components (HTML/CSS/client-side JS), load skill: `modern-web-guidance` first to follow modern web best practices. Use #tool:browser to test and iterate on the design.
 - When you want to check current aspire apphosts status, use `aspire` CLI tool. Load skill: `aspire`.
 
 ## References
