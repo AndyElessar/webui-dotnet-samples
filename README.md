@@ -1,7 +1,7 @@
 # WebUI .NET Samples
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)
+![.NET 11](https://img.shields.io/badge/.NET-11-512BD4)
 ![Sample](https://img.shields.io/badge/Type-Sample-0A7A3E)
 
 This repository contains demo apps that show how [microsoft/webui](https://github.com/microsoft/webui), ASP.NET Core, and Aspire can work together.
@@ -23,7 +23,7 @@ This repository contains demo apps that show how [microsoft/webui](https://githu
 
 Prerequisites:
 
-- .NET 10 SDK
+- .NET 11 SDK
 - Node.js and npm
 - Aspire CLI
 

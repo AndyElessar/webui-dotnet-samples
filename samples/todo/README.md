@@ -6,7 +6,7 @@ This sample shows how [microsoft/webui](https://github.com/microsoft/webui), ASP
 
 Prerequisites:
 
-- .NET 10 SDK
+- .NET 11 SDK
 - Node.js and npm
 - Aspire CLI
 

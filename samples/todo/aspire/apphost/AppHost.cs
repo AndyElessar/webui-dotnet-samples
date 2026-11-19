@@ -1,6 +1,6 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddProject<Projects.backend>("todo-backend")
+builder.AddDotnetProject("todo-backend", "../../backend/backend.csproj")
 	.WithExternalHttpEndpoints();
 
 builder.Build().Run();
