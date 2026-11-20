@@ -8,7 +8,8 @@ export default defineConfig({
   tsconfig: './tsconfig.client.json',
   format: 'esm',
   deps: {
-    alwaysBundle: ['@microsoft/webui-framework'],
+    // Match the package root and its subpath exports (e.g. `/runtime.js`).
+    alwaysBundle: [/^@microsoft\/webui-framework(\/.*)?$/],
     onlyBundle: false,
   },
 })
